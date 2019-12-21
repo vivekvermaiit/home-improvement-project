@@ -1,15 +1,25 @@
 class ProjectsController < ApplicationController
-  before_action :set_project, only: [:show, :edit, :update, :destroy]
+  before_action :set_project, only: [:update, :destroy]
 
   # GET /projects
   # GET /projects.json
   def index
-    @projects = Project.all
+    @projects=policy_scope(Project).includes(:user)
   end
 
   # GET /projects/1
   # GET /projects/1.json
   def show
+    begin
+      @project = policy_scope(Project).find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      respond_to do |format|
+        format.html { redirect_to projects_url, notice: 'You are not allowed to view this project' }
+        format.json { render json: { message: 'You are not allowed to view this project' }, status: 401 }
+      end
+      return
+    end
+
   end
 
   # GET /projects/new
@@ -19,6 +29,15 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1/edit
   def edit
+    begin
+      @project = policy_scope(Project).find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      respond_to do |format|
+        format.html { redirect_to projects_url, notice: 'You are not allowed to edit this project' }
+        format.json { render json: { message: 'You are not allowed to edit this project' }, status: 401 }
+      end
+      return
+    end
   end
 
   # POST /projects
@@ -42,7 +61,7 @@ class ProjectsController < ApplicationController
   # PATCH/PUT /projects/1.json
   def update
     respond_to do |format|
-      if @project.update(project_params)
+      if @project.update(permitted_attributes(@project))
         format.html { redirect_to @project, notice: 'Project was successfully updated.' }
         format.json { render :show, status: :ok, location: @project }
       else
@@ -55,6 +74,16 @@ class ProjectsController < ApplicationController
   # DELETE /projects/1
   # DELETE /projects/1.json
   def destroy
+    begin
+      authorize @project
+    rescue Pundit::NotAuthorizedError => e
+      respond_to do |format|
+        format.html { redirect_to projects_url, notice: 'You are not allowed to destroy this project' }
+        format.json { render json: { message: 'You are not allowed to destroy this project' }, status: 401 }
+      end
+      return
+    end
+
     @project.destroy
     respond_to do |format|
       format.html { redirect_to projects_url, notice: 'Project was successfully destroyed.' }
