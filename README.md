@@ -1,24 +1,30 @@
 # README
+Follow the following steps to run the project:
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+1) The database in postgres.
+Installation instructions for macOS here:
+https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-ruby-on-rails-application-on-macos
 
-Things you may want to cover:
+2) After you have the database up and running, run the following on terminal to create a db role
 
-* Ruby version
+`createuser -P -d homeapp`
 
-* System dependencies
+3) At the password prompt use this as password:
 
-* Configuration
+`homeapp`
 
-* Database creation
+4) Clone the project
 
-* Database initialization
+`git clone git@github.com:vivekvermaiit/home-improvement-project.git`
 
-* How to run the test suite
+5) Move to project directory and run migrations
 
-* Services (job queues, cache servers, search engines, etc.)
+`rails db:create db:migrate`
 
-* Deployment instructions
+6) start server
 
-* ...
+`rails server`
+
+Should be up and running at
+http://localhost:3000/
+
