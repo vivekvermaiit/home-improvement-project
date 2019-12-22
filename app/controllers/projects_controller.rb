@@ -25,12 +25,14 @@ class ProjectsController < ApplicationController
   # GET /projects/new
   def new
     @project = Project.new
+    @editable_params = ProjectPolicy.new(current_user,@project).permitted_attributes_for_create
   end
 
   # GET /projects/1/edit
   def edit
     begin
       @project = policy_scope(Project).find(params[:id])
+      @editable_params = ProjectPolicy.new(current_user,@project).permitted_attributes_for_update
     rescue ActiveRecord::RecordNotFound => e
       respond_to do |format|
         format.html { redirect_to projects_url, notice: 'You are not allowed to edit this project' }
@@ -45,7 +47,6 @@ class ProjectsController < ApplicationController
   def create
     @project = Project.new(project_params)
     @project.user = current_user
-
     respond_to do |format|
       if @project.save
         format.html { redirect_to @project, notice: 'Project was successfully created.' }

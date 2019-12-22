@@ -13,19 +13,19 @@
 
   <div class="field">
     <%= form.label :name %>
-    <%= form.text_field :name, id: :project_name %>
+    <%= form.text_field :name, id: :project_name, disabled: @editable_params.exclude?(:name)%>
   </div>
 
   <div class="field">
   <% Project::PROJECT_TYPES.values.each do |project_type| %>
-    <%= form.radio_button :project_type, project_type %>
+    <%= form.radio_button :project_type, project_type, disabled: @editable_params.exclude?(:project_type)%>
     <%= form.label project_type.to_sym %>
   <% end %>
   </div>
 
   <div class="field">
     <%= form.label :description %>
-    <%= form.text_area :description, id: :project_description %>
+    <%= form.text_area :description, id: :project_description, disabled: @editable_params.exclude?(:description) %>
   </div>
 
   <div class="actions">

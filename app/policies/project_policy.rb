@@ -6,6 +6,10 @@ class ProjectPolicy
     @project = project
   end
 
+  def permitted_attributes_for_create
+    [:name, :project_type, :description] #all
+  end
+
   #user can only his own or edit description for public projects.
   def permitted_attributes_for_update
     if @user.admin? or @project.user == @user
