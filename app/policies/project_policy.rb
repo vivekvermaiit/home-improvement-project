@@ -14,7 +14,7 @@ class ProjectPolicy
   def permitted_attributes_for_update
     if @user.admin? or @project.user == @user
       [:name, :project_type, :description] #all
-    elsif @project.project_type == Project::PROJECT_TYPES[:public]
+    elsif @project.is_public?
       [:description]
     else
       []
