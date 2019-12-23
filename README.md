@@ -1,3 +1,4 @@
+
 # README
 Follow the following steps to run the project:
 
@@ -28,3 +29,12 @@ https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your
 Should be up and running at
 http://localhost:3000/
 
+## To run the tests
+
+1) Run migrations
+
+`rake db:drop db:create db:migrate RAILS_ENV="test"`
+
+2) Run Rspec tests
+
+`bundle exec rake spec`
